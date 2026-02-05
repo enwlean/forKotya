@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latvijas Skola 2026 - Sagatavošanās</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --light: #f8fafc;
+            --dark: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+
+        /* Шапка сайта */
+        header {
+            background: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-weight: 700; font-size: 1.5rem; color: var(--primary); }
+
+        /* Навигация по предметам */
+        nav {
+            display: flex;
+            gap: 15px;
+            padding: 20px 5%;
+            overflow-x: auto;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-item {
+            padding: 10px 20px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav-item.active { background: var(--primary); color: white; }
+
+        /* Основной контейнер */
+        .main-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .progress-container {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            background: var(--success);
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: 0.5s;
+        }
+
+        /* Карточка задания */
+        .task-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .difficulty-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .diff-easy { background: #dcfce7; color: #166534; }
+        .diff-medium { background: #fef9c3; color: #854d0e; }
+        .diff-hard { background: #fee2e2; color: #991b1b; }
+
+        h2 { font-size: 1.8rem; margin-bottom: 20px; }
+        .question { font-size: 1.2rem; line-height: 1.6; margin-bottom: 25px; }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:active { transform: scale(0.98); }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-hint { background: var(--warning); color: white; }
+        .btn-lang { background: var(--dark); color: white; }
+
+        /* Админка */
+        .admin-section {
+            margin-top: 50px;
+            padding: 20px;
+            background: #cbd5e1;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .feedback-msg {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Latvija Exam 2026</div>
+    <div style="display: flex; gap: 10px;">
+        <button class="btn-lang" onclick="changeLang('lv')">LV</button>
+        <button class="btn-lang" onclick="changeLang('ru')">RU</button>
+        <button onclick="toggleAdmin()" style="background:none; color: gray; font-size: 12px;">Admin</button>
+    </div>
+</header>
+
+<nav id="subjectNav">
+    </nav>
+
+<div class="main-container">
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="task-card">
+        <div id="diffTag" class="difficulty-tag">Easy</div>
+        <h2 id="subjectTitle">Priekšmets</h2>
+        <div class="question" id="questionText">Ielādē...</div>
+        
+        <input type="text" id="answerInput" placeholder="Atbilde...">
+        
+        <div id="feedback" class="feedback-msg"></div>
+
+        <div class="btn-group">
+            <button class="btn-primary" onclick="checkAnswer()" id="btnCheck">Pārbaudīt</button>
+            <button class="btn-hint" onclick="giveHint()" id="btnHint">Padoms (3)</button>
+            <button onclick="loadNextTask()" style="background:#e2e8f0" id="btnNext">Izlaist</button>
+        </div>
+    </div>
+
+    <div class="admin-section" id="adminPanel">
+        <h3>Admin Panel (Iestatījumi)</h3>
+        <label>Padomu skaits:</label>
+        <input type="number" id="adminHintInput" value="3">
+        <button onclick="updateHintsAdmin()">Saglabāt</button>
+    </div>
+</div>
+
+<script>
+    // --- ДАННЫЕ ЗАДАНИЙ ---
+    const tasks = {
+        math: [
+            { diff: 'easy', q: {lv: '15% no 200 ir...', ru: '15% от 200 это...'}, a: '30', h: {lv: 'Dali ar 100 и reizini ar 15', ru: 'Раздели на 100 и умножь на 15'} },
+            { diff: 'medium', q: {lv: 'Atrisini: 2x + 10 = 20. x = ?', ru: 'Реши: 2x + 10 = 20. x = ?'}, a: '5', h: {lv: 'Atņem 10 no abām pusēm', ru: 'Вычти 10 из обеих сторон'} },
+            { diff: 'hard', q: {lv: 'Kvadrāta laukums ir 64 cm². Kāds ir tā perimetrs? (tikai skaitlis)', ru: 'Площадь квадрата 64 см². Какой его периметр? (только число)'}, a: '32', h: {lv: 'Vispirms atrodi malu (sakne no 64)', ru: 'Сначала найди сторону (корень из 64)'} }
+        ],
+        latvian: [
+            { diff: 'easy', q: {lv: 'Kāds ir vārda "skriet" nenoteiksme?', ru: 'Какова неопределенная форма слова "skriet"?'}, a: 'skriet', h: {lv: 'Tas jau ir nenoteiksmē!', ru: 'Это уже неопределенная форма!'} },
+            { diff: 'medium', q: {lv: 'Ieraksti trūkstošo burtu: Sa__e (солнце)', ru: 'Вставь пропущенную букву: Sa__e (солнце)'}, a: 'ule', h: {lv: 'Debesu spīdeklis', ru: 'Небесное светило'} }
+        ],
+        biology: [
+            { diff: 'medium', q: {lv: 'Kurš orgāns sūknē asinis?', ru: 'Какой орган качает кровь?'}, a: {lv: 'sirds', ru: 'сердце'}, h: {lv: 'Atrodas krūšu kreisajā pusē', ru: 'Находится в левой части груди'} }
+        ],
+        social: [
+            { diff: 'easy', q: {lv: 'Kurā gadā Latvija atguva neatkarību?', ru: 'В каком году Латвия восстановила независимость?'}, a: '1991', h: {lv: '20. gadsimta beigas', ru: 'Конец 20 века'} }
+        ]
+    };
+
+    const uiTexts = {
+        lv: { check: "Pārbaudīt", next: "Nākamais", hint: "Padoms", correct: "Izcili! Pareizi!", wrong: "Nav pareizi, mēģini vēlreiz.", subjects: ["Matemātika", "Latviešu valoda", "Bioloģija", "Sociālās zinības"] },
+        ru: { check: "Проверить", next: "Далее", hint: "Подсказка", correct: "Замечательно! Правильно!", wrong: "Неверно, попробуй еще раз.", subjects: ["Математика", "Латышский язык", "Биология", "Социальные знания"] }
+    };
+
+    // --- ЛОГИКА ---
+    let lang = 'lv';
+    let currentSubject = 'math';
+    let currentTaskIdx = 0;
+    let hints = 3;
+    let score = 0;
+
+    function init() {
+        renderNav();
+        loadTask();
+    }
+
+    function renderNav() {
+        const nav = document.getElementById('subjectNav');
+        const keys = Object.keys(tasks);
+        const names = uiTexts[lang].subjects;
+        
+        nav.innerHTML = '';
+        keys.forEach((key, i) => {
+            const div = document.createElement('div');
+            div.className = `nav-item ${key === currentSubject ? 'active' : ''}`;
+            div.innerText = names[i];
+            div.onclick = () => { currentSubject = key; currentTaskIdx = 0; renderNav(); loadTask(); };
+            nav.appendChild(div);
+        });
+    }
+
+    function loadTask() {
+        const task = tasks[currentSubject][currentTaskIdx];
+        const t = uiTexts[lang];
+        
+        document.getElementById('subjectTitle').innerText = t.subjects[Object.keys(tasks).indexOf(currentSubject)];
+        document.getElementById('questionText').innerText = task.q[lang];
+        document.getElementById('diffTag').innerText = task.diff;
+        document.getElementById('diffTag').className = `difficulty-tag diff-${task.diff}`;
+        document.getElementById('btnCheck').innerText = t.check;
+        document.getElementById('btnHint').innerText = `${t.hint} (${hints})`;
+        document.getElementById('answerInput').value = '';
+        document.getElementById('feedback').style.display = 'none';
+        
+        updateProgress();
+    }
+
+    function checkAnswer() {
+        const userVal = document.getElementById('answerInput').value.trim().toLowerCase();
+        const task = tasks[currentSubject][currentTaskIdx];
+        const fb = document.getElementById('feedback');
+        
+        let correct = false;
+        if (typeof task.a === 'object') {
+            if (userVal === task.a.lv || userVal === task.a.ru) correct = true;
+        } else {
+            if (userVal === task.a.toLowerCase()) correct = true;
+        }
+
+        fb.style.display = 'block';
+        if (correct) {
+            fb.innerText = uiTexts[lang].correct;
+            fb.style.background = '#dcfce7';
+            fb.style.color = '#166534';
+            score++;
+            setTimeout(loadNextTask, 1500);
+        } else {
+            fb.innerText = uiTexts[lang].wrong;
+            fb.style.background = '#fee2e2';
+            fb.style.color = '#991b1b';
+        }
+    }
+
+    function giveHint() {
+        if (hints > 0) {
+            hints--;
+            alert(tasks[currentSubject][currentTaskIdx].h[lang]);
+            document.getElementById('btnHint').innerText = `${uiTexts[lang].hint} (${hints})`;
+        } else {
+            alert(lang === 'lv' ? "Padomu vairs nav!" : "Подсказок больше нет!");
+        }
+    }
+
+    function loadNextTask() {
+        currentTaskIdx++;
+        if (currentTaskIdx >= tasks[currentSubject].length) {
+            currentTaskIdx = 0;
+            alert(lang === 'lv' ? "Apsveicam! Priekšmets pabeigts!" : "Поздравляем! Предмет пройден!");
+        }
+        loadTask();
+    }
+
+    function updateProgress() {
+        const total = tasks[currentSubject].length;
+        const perc = ((currentTaskIdx) / total) * 100;
+        document.getElementById('progressBar').style.width = perc + "%";
+    }
+
+    function changeLang(l) {
+        lang = l;
+        renderNav();
+        loadTask();
+    }
+
+    function toggleAdmin() {
+        const p = document.getElementById('adminPanel');
+        p.style.display = p.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function updateHintsAdmin() {
+        hints = document.getElementById('adminHintInput').value;
+        document.getElementById('btnHint').innerText = `${uiTexts[lang].hint} (${hints})`;
+        alert("Saglabāts!");
+    }
+
+    init();
+</script>
+
+</body>
+</html>
