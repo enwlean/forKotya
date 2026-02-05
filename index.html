@@ -3,261 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latvijas Digitālā Skola 2026</title>
+    <title>Latvijas Skolas Mega Portāls 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #4f46e5; --secondary: #9333ea; --success: #10b981;
-            --bg: #f8fafc; --dark: #0f172a; --white: #ffffff;
-        }
-        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--dark); margin: 0; transition: 0.3s; }
-
-        header {
-            background: var(--white); padding: 1rem 5%; display: flex; justify-content: space-between;
-            align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;
-        }
-
-        .main-grid {
-            display: grid; grid-template-columns: 320px 1fr; gap: 2rem;
-            max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem;
-        }
-
-        /* Sidebar & Stats */
-        .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
-        .card { background: var(--white); border-radius: 24px; padding: 1.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-        
-        .profile-card {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white); text-align: center;
-        }
-        .xp-val { font-size: 2.5rem; font-weight: 800; margin: 0.5rem 0; }
-        .rank-badge { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; }
-
-        /* Navigation */
-        .nav-title { font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 1px; }
-        .filter-btn {
-            width: 100%; text-align: left; padding: 12px 16px; border: none; background: transparent;
-            border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.2s; margin-bottom: 4px;
-        }
-        .filter-btn:hover { background: #f1f5f9; }
-        .filter-btn.active { background: var(--primary); color: var(--white); }
-
-        /* Quiz Area */
-        .quiz-container { background: var(--white); border-radius: 32px; padding: 3rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.08); position: relative; }
-        .q-header { display: flex; gap: 10px; margin-bottom: 1.5rem; }
-        .tag { padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
-        .tag-blue { background: #e0e7ff; color: #4338ca; }
-        .tag-orange { background: #ffedd5; color: #9a3412; }
-
-        .question { font-size: 1.75rem; font-weight: 600; margin-bottom: 2rem; line-height: 1.4; }
-        .answer-input {
-            width: 100%; padding: 1.25rem; border: 3px solid #f1f5f9; border-radius: 20px;
-            font-size: 1.25rem; outline: none; transition: 0.3s; margin-bottom: 1.5rem; box-sizing: border-box;
-        }
-        .answer-input:focus { border-color: var(--primary); background: #f8fafc; }
-
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        .btn { padding: 1.2rem; border-radius: 18px; border: none; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-        .btn-check { background: var(--primary); color: var(--white); }
-        .btn-hint { background: #f59e0b; color: var(--white); }
-        .btn:active { transform: scale(0.96); }
-
-        .feedback {
-            margin-top: 1.5rem; padding: 1rem; border-radius: 15px; text-align: center;
-            font-weight: 700; display: none; animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes pop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-
-        .admin-panel { background: #1e293b; color: white; padding: 2rem; border-radius: 20px; display: none; margin-top: 2rem; }
-
-        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } .sidebar { order: 2; } }
+        :root { --primary: #4f46e5; --bg: #f8fafc; --card: #ffffff; --text: #0f172a; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+        header { background: var(--card); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .main-grid { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem; }
+        .sidebar { display: flex; flex-direction: column; gap: 1rem; }
+        .card { background: var(--card); border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .stats { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; text-align: center; }
+        .menu-btn { width: 100%; text-align: left; padding: 12px; border: none; background: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .menu-btn.active { background: var(--primary); color: white; }
+        .quiz-box { background: var(--card); border-radius: 30px; padding: 3rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); text-align: center; }
+        .q-text { font-size: 1.8rem; font-weight: 600; margin-bottom: 2rem; min-height: 80px; }
+        input { width: 100%; padding: 1.2rem; border: 3px solid #f1f5f9; border-radius: 15px; font-size: 1.4rem; margin-bottom: 1.5rem; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
+        .btn { padding: 1.2rem; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; width: 100%; font-size: 1rem; }
+        .btn-check { background: var(--primary); color: white; }
+        .feedback { margin-top: 1rem; padding: 1rem; border-radius: 10px; display: none; font-weight: 700; }
+        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: 800; font-size: 1.5rem;">LATVIJA <span style="color:var(--primary)">2026</span></div>
+    <div style="font-weight: 800; font-size: 1.5rem;">EKSĀMENS 2026</div>
     <div style="display: flex; gap: 10px;">
-        <button onclick="setLang('lv')" class="btn" style="padding: 8px 15px; background: #eee;">LV</button>
-        <button onclick="setLang('ru')" class="btn" style="padding: 8px 15px; background: #eee;">RU</button>
-        <button onclick="toggleAdmin()" style="background: none; border: none; color: #94a3b8; cursor: pointer;">Admin</button>
+        <button onclick="setLang('lv')" class="menu-btn" style="width: auto;">LV</button>
+        <button onclick="setLang('ru')" class="menu-btn" style="width: auto;">RU</button>
     </div>
 </header>
 
 <div class="main-grid">
     <aside class="sidebar">
-        <div class="card profile-card">
-            <div class="rank-badge" id="rankName">Iesācējs</div>
-            <div class="xp-val" id="xpDisplay">0 XP</div>
-            <div style="opacity: 0.8; font-size: 0.9rem;">Atrisināti: <span id="solvedCount">0</span></div>
+        <div class="card stats">
+            <div id="rank">Iesācējs</div>
+            <div style="font-size: 2rem; font-weight: 800;" id="xp">0 XP</div>
+            <div style="font-size: 0.8rem; opacity: 0.8;">Atrisināti: <span id="count">0</span></div>
         </div>
-
         <div class="card">
-            <div class="nav-title" id="txtGrade">Klase</div>
-            <div id="gradeMenu">
-                <button class="filter-btn" onclick="updateGrade(4)">4. klase</button>
-                <button class="filter-btn" onclick="updateGrade(5)">5. klase</button>
-                <button class="filter-btn active" onclick="updateGrade(6)">6. klase</button>
-            </div>
-            
-            <div class="nav-title" id="txtSubj" style="margin-top: 1.5rem;">Priekšmets</div>
-            <div id="subjMenu"></div>
+            <div style="font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 1rem;">PRIEKŠMETI</div>
+            <div id="menu"></div>
         </div>
     </aside>
 
-    <main>
-        <div class="quiz-container">
-            <div class="q-header">
-                <span class="tag tag-blue" id="tagGrade">6. klase</span>
-                <span class="tag tag-orange" id="tagDiff">Medium</span>
-            </div>
-            <div class="question" id="qText">Izvēlies tēmu sānā!</div>
-            <input type="text" class="answer-input" id="answerInput" placeholder="..." autocomplete="off">
-            
-            <div id="fbBox" class="feedback"></div>
-
-            <div class="btn-group">
-                <button class="btn btn-check" onclick="checkAnswer()" id="btnCheck">Pārbaudīt</button>
-                <button class="btn btn-hint" onclick="showHint()" id="btnHint">Padoms (3)</button>
-            </div>
-        </div>
-
-        <div class="admin-panel" id="adminPanel">
-            <h3>Iestatījumi (Admin)</h3>
-            <button onclick="resetStats()" style="background: #ef4444; color: white; padding: 10px; border: none; border-radius: 10px; cursor: pointer;">Dzēst visus datus (Reset)</button>
-            <p style="font-size: 0.8rem; margin-top: 10px;">Uzmanību! Visi punkti un XP tiks dzēsti.</p>
+    <main class="quiz-box">
+        <div id="topicTag" style="color: var(--primary); font-weight: 800; margin-bottom: 1rem;">MATEMĀTIKA</div>
+        <div class="q-text" id="qText">Ielādē...</div>
+        <input type="text" id="ans" placeholder="Atbilde..." autocomplete="off">
+        <div id="fb" class="feedback"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <button class="btn btn-check" onclick="check()">Pārbaudīt</button>
+            <button class="btn" onclick="hint()" style="background: #f59e0b; color: white;">Padoms</button>
         </div>
     </main>
 </div>
 
 <script>
-    // --- ОГРОМНАЯ БАЗА ЗАДАНИЙ ---
-    const DB = [
-        { g: 6, s: 'math', d: 'Easy', q: {lv: '0.4 + 0.16', ru: '0.4 + 0.16'}, a: '0.56', h: {lv: 'Atceries: 0.4 = 0.40', ru: 'Помни: 0.4 = 0.40'} },
-        { g: 6, s: 'math', d: 'Medium', q: {lv: 'Atrisini: 4x - 10 = 30', ru: 'Реши: 4x - 10 = 30'}, a: '10', h: {lv: '4x = 40', ru: '4x = 40'} },
-        { g: 6, s: 'bio', d: 'Medium', q: {lv: 'Kurā orgānā notiek gremošana?', ru: 'В каком органе происходит пищеварение?'}, a: {lv: 'kuņģis', ru: 'желудок'}, h: {lv: 'Vēdera dobumā', ru: 'В брюшной полости'} },
-        { g: 6, s: 'geo', d: 'Hard', q: {lv: 'Kāds ir Latvijas augstākais paugurs?', ru: 'Какая самая высокая точка Латвии?'}, a: {lv: 'gaiziņkalns', ru: 'гайзинькалнс'}, h: {lv: 'Sākas ar G', ru: 'Начинается на Г'} },
-        { g: 4, s: 'math', d: 'Easy', q: {lv: '25 + 75', ru: '25 + 75'}, a: '100', h: {lv: 'Apaļš skaitlis', ru: 'Круглое число'} },
-        { g: 5, s: 'lv', d: 'Medium', q: {lv: 'Ieraksti burtu: G_imen_ (семья)', ru: 'Вставь буквы: G_imen_ (семья)'}, a: 'ie', h: {lv: 'Divskaņa "ie"', ru: 'Дифтонг "ie"'} }
-    ];
-
-    const UI = {
-        lv: { check: "Pārbaudīt", hint: "Padoms", correct: "Izcili! Pareizi!", wrong: "Mēģini vēlreiz!", subjs: {math: "Matemātika", bio: "Bioloģija", geo: "Ģeogrāfija", lv: "Latviešu valoda"} },
-        ru: { check: "Проверить", hint: "Подсказка", correct: "Отлично! Верно!", wrong: "Попробуй еще!", subjs: {math: "Математика", bio: "Биология", geo: "География", lv: "Латышский язык"} }
+    // БАЗА ДАННЫХ ИЗ СКРИНШОТОВ
+    const STATIC_DB = {
+        math: [
+            {q: {lv: "Ja mērogs ir 1:5000, cik metriem dabā atbilst 2 cm kartē?", ru: "Масштаб 1:5000. Сколько метров в природе в 2 см на карте?"}, a: "100", h: "2 * 5000 = 10000 cm = 100 m"},
+            {q: {lv: "Aprēķini: -12 + (-8)", ru: "Вычисли: -12 + (-8)"}, a: "-20", h: "- (12 + 8)"},
+            {q: {lv: "Skaitļa 0.4 apgrieztais skaitlis ir...", ru: "Обратное число для 0.4 это..."}, a: "2.5", h: "1 / 0.4 = 10 / 4 = 2.5"},
+            {q: {lv: "15% no 200 ir...", ru: "15% от 200 это..."}, a: "30", h: "200 * 0.15"},
+            {q: {lv: "Taisnstūra paralēlskaldņa tilpums, ja malas ir 2, 3, 4 cm?", ru: "Объем параллелепипеда со сторонами 2, 3, 4 см?"}, a: "24", h: "V = a * b * c"}
+        ],
+        bio: [
+            {q: {lv: "Kurš process uz Zemes nodrošina skābekli?", ru: "Какой процесс на Земле обеспечивает кислород?"}, a: {lv: "fotosintēze", ru: "фотосинтез"}, h: "Augi un gaisma."},
+            {q: {lv: "Kā sauc vielu pāreju no cieta stāvokļa šķidrā?", ru: "Как называется переход вещества из твердого в жидкое?"}, a: {lv: "kušana", ru: "плавление"}, h: "Ledus pārvēršas ūdenī."},
+            {q: {lv: "Kas atrodas augu šūnas centrā un satur DNS?", ru: "Что в центре растительной клетки содержит ДНК?"}, a: {lv: "kodols", ru: "ядро"}, h: "Šūnas vadības centrs."}
+        ],
+        soc: [
+            {q: {lv: "Kurā gadsimtā mēs dzīvojam tagad?", ru: "В каком веке мы живем сейчас?"}, a: "21", h: "2026. gads."},
+            {q: {lv: "Kā sauc informācijas ieguvi no pagātnes lietām?", ru: "Как называется получение информации из вещей прошлого?"}, a: {lv: "arheoloģija", ru: "археология"}, h: "Izrakumi."}
+        ]
     };
 
-    // --- СОСТОЯНИЕ (LOAD FROM LOCALSTORAGE) ---
-    let state = JSON.parse(localStorage.getItem('exam_state_2026')) || {
-        xp: 0,
-        solved: 0,
-        hints: 5,
-        lang: 'lv',
-        grade: 6,
-        subj: 'math'
-    };
-
-    let currentIndex = 0;
-
-    function save() {
-        localStorage.setItem('exam_state_2026', JSON.stringify(state));
+    // ГЕНЕРАТОР ДЛЯ ДОСТИЖЕНИЯ 50+ ВОПРОСОВ
+    function generateMath() {
+        let type = Math.floor(Math.random() * 4);
+        let n1 = Math.floor(Math.random() * 50), n2 = Math.floor(Math.random() * 50);
+        if(type === 0) return { q: {lv: `Aprēķini: -${n1} + ${n2}`, ru: `Вычисли: -${n1} + ${n2}`}, a: (n2-n1).toString(), h: "Saskaiti negatīvu un pozitīvu." };
+        if(type === 1) return { q: {lv: `Aprēķini: ${n1}% no 200`, ru: `Вычисли: ${n1}% от 200`}, a: (n1*2).toString(), h: "Reizini ar procentu daļu." };
+        if(type === 2) return { q: {lv: `Decimāldaļa: ${n1}/10`, ru: `Десятичная дробь: ${n1}/10`}, a: (n1/10).toString(), h: "Pārvieto komatu." };
+        return STATIC_DB.math[Math.floor(Math.random() * STATIC_DB.math.length)];
     }
 
-    function init() {
-        renderSubjs();
-        updateProfile();
-        loadTask();
-    }
+    let state = JSON.parse(localStorage.getItem('mega_db_2026')) || { xp: 0, solved: 0, lang: 'lv', subj: 'math' };
+    let currentTask;
 
-    function renderSubjs() {
-        const menu = document.getElementById('subjMenu');
-        menu.innerHTML = '';
-        Object.keys(UI[state.lang].subjs).forEach(key => {
-            const btn = document.createElement('button');
-            btn.className = `filter-btn ${key === state.subj ? 'active' : ''}`;
-            btn.innerText = UI[state.lang].subjs[key];
-            btn.onclick = () => { state.subj = key; currentIndex = 0; renderSubjs(); loadTask(); save(); };
-            menu.appendChild(btn);
-        });
+    function save() { localStorage.setItem('mega_db_2026', JSON.stringify(state)); }
+
+    function render() {
+        const subjs = { math: 'Matemātika', bio: 'Dabaszinības', soc: 'Sociālās zinības' };
+        document.getElementById('menu').innerHTML = Object.keys(subjs).map(k => 
+            `<button class="menu-btn ${k===state.subj?'active':''}" onclick="setSubj('${k}')">${subjs[k]}</button>`
+        ).join('');
     }
 
     function loadTask() {
-        const tasks = DB.filter(t => t.g === state.grade && t.s === state.subj);
-        const fb = document.getElementById('fbBox'); fb.style.display = 'none';
-        
-        if (tasks.length === 0) {
-            document.getElementById('qText').innerText = state.lang === 'lv' ? "Nav uzdevumu šai klasei." : "Нет заданий для этого класса.";
-            return;
+        if(state.subj === 'math') currentTask = generateMath();
+        else {
+            let list = STATIC_DB[state.subj];
+            currentTask = list[Math.floor(Math.random() * list.length)];
         }
-
-        const t = tasks[currentIndex % tasks.length];
-        document.getElementById('qText').innerText = t.q[state.lang];
-        document.getElementById('tagGrade').innerText = `${t.g}. klase`;
-        document.getElementById('tagDiff').innerText = t.d;
-        document.getElementById('btnCheck').innerText = UI[state.lang].check;
-        document.getElementById('btnHint').innerText = `${UI[state.lang].hint} (${state.hints})`;
-        document.getElementById('answerInput').value = '';
+        document.getElementById('qText').innerText = currentTask.q[state.lang];
+        document.getElementById('ans').value = '';
+        document.getElementById('fb').style.display = 'none';
+        document.getElementById('topicTag').innerText = state.subj.toUpperCase();
     }
 
-    function checkAnswer() {
-        const input = document.getElementById('answerInput').value.trim().toLowerCase();
-        const tasks = DB.filter(t => t.g === state.grade && t.s === state.subj);
-        const t = tasks[currentIndex % tasks.length];
-        const fb = document.getElementById('fbBox');
+    function check() {
+        let val = document.getElementById('ans').value.trim().toLowerCase();
+        let correct = false;
+        if(typeof currentTask.a === 'object') correct = (val === currentTask.a.lv || val === currentTask.a.ru);
+        else correct = (val === currentTask.a);
 
-        let isCorrect = false;
-        if(typeof t.a === 'object') {
-            if(input === t.a.lv.toLowerCase() || input === t.a.ru.toLowerCase()) isCorrect = true;
-        } else {
-            if(input === t.a.toLowerCase()) isCorrect = true;
-        }
-
+        let fb = document.getElementById('fb');
         fb.style.display = 'block';
-        if(isCorrect) {
-            fb.innerText = UI[state.lang].correct; fb.style.background = "#d1fae5"; fb.style.color = "#065f46";
-            state.xp += 20; state.solved += 1;
-            updateProfile();
-            save();
-            setTimeout(() => { currentIndex++; loadTask(); }, 1500);
+        if(correct) {
+            fb.innerText = state.lang === 'lv' ? "Pareizi! +20 XP" : "Верно! +20 XP";
+            fb.style.background = "#d1fae5";
+            state.xp += 20; state.solved++;
+            updateUI(); save();
+            setTimeout(loadTask, 1200);
         } else {
-            fb.innerText = UI[state.lang].wrong; fb.style.background = "#fee2e2"; fb.style.color = "#991b1b";
+            fb.innerText = state.lang === 'lv' ? "Mēģini vēlreiz!" : "Попробуй еще раз!";
+            fb.style.background = "#fee2e2";
         }
     }
 
-    function showHint() {
-        if(state.hints > 0) {
-            const tasks = DB.filter(t => t.g === state.grade && t.s === state.subj);
-            alert(tasks[currentIndex % tasks.length].h[state.lang]);
-            state.hints--;
-            updateProfile();
-            loadTask();
-            save();
-        } else {
-            alert("Nav padomu! / Нет подсказок!");
-        }
+    function updateUI() {
+        document.getElementById('xp').innerText = `${state.xp} XP`;
+        document.getElementById('count').innerText = state.solved;
+        let r = "Iesācējs";
+        if(state.xp > 500) r = "Zinātnieks";
+        if(state.xp > 1500) r = "Ģēnijs";
+        document.getElementById('rank').innerText = r;
     }
 
-    function updateProfile() {
-        document.getElementById('xpDisplay').innerText = `${state.xp} XP`;
-        document.getElementById('solvedCount').innerText = state.solved;
-        
-        let rank = "Iesācējs";
-        if(state.xp > 200) rank = "Zinātnieks";
-        if(state.xp > 600) rank = "Profesors";
-        if(state.xp > 1500) rank = "Ģēnijs";
-        document.getElementById('rankName').innerText = rank;
-    }
+    function setSubj(s) { state.subj = s; render(); loadTask(); save(); }
+    function setLang(l) { state.lang = l; render(); loadTask(); save(); }
+    function hint() { alert(currentTask.h); }
 
-    function updateGrade(g) {
-        state.grade = g; currentIndex = 0;
-        document.querySelectorAll('#gradeMenu button').forEach((b, i) => b.classList.toggle('active', (i+4) === g));
-        loadTask(); save();
-    }
-
-    function setLang(l) { state.lang = l; renderSubjs(); loadTask(); save(); }
-    function toggleAdmin() { const p = document.getElementById('adminPanel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
-    function resetStats() { if(confirm("Tiešām?")) { localStorage.clear(); location.reload(); } }
-
-    init();
+    render(); updateUI(); loadTask();
 </script>
 </body>
 </html>
