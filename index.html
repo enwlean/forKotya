@@ -1,154 +1,77 @@
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latvijas Skolas Mega Portāls 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #4f46e5; --bg: #f8fafc; --card: #ffffff; --text: #0f172a; }
-        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
-        header { background: var(--card); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .main-grid { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem; }
-        .sidebar { display: flex; flex-direction: column; gap: 1rem; }
-        .card { background: var(--card); border-radius: 20px; padding: 1.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .stats { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; text-align: center; }
-        .menu-btn { width: 100%; text-align: left; padding: 12px; border: none; background: none; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-        .menu-btn.active { background: var(--primary); color: white; }
-        .quiz-box { background: var(--card); border-radius: 30px; padding: 3rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); text-align: center; }
-        .q-text { font-size: 1.8rem; font-weight: 600; margin-bottom: 2rem; min-height: 80px; }
-        input { width: 100%; padding: 1.2rem; border: 3px solid #f1f5f9; border-radius: 15px; font-size: 1.4rem; margin-bottom: 1.5rem; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--primary); }
-        .btn { padding: 1.2rem; border-radius: 15px; border: none; font-weight: 800; cursor: pointer; width: 100%; font-size: 1rem; }
-        .btn-check { background: var(--primary); color: white; }
-        .feedback { margin-top: 1rem; padding: 1rem; border-radius: 10px; display: none; font-weight: 700; }
-        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
-    </style>
+    <title>PetMe - Котики!</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <nav>
+        <a href="#" class="logo" onclick="goHome(); return false;">🐱 PetMe</a>
+        <ul class="nav-links">
+            <li><a href="#" onclick="goHome(); return false;">Главная</a></li>
+            <li><a href="#" onclick="showGallery(); return false;">Галерея</a></li>
+            <li><a href="#" onclick="showPopular(); return false;">Популярные</a></li>
+            <li id="userNav"></li>
+        </ul>
+        <button onclick="toggleLang()"><span id="lang">RU</span> 🌐</button>
+    </nav>
 
-<header>
-    <div style="font-weight: 800; font-size: 1.5rem;">EKSĀMENS 2026</div>
-    <div style="display: flex; gap: 10px;">
-        <button onclick="setLang('lv')" class="menu-btn" style="width: auto;">LV</button>
-        <button onclick="setLang('ru')" class="menu-btn" style="width: auto;">RU</button>
+    <div id="content"></div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <h2>login 4 cats</h2>
+
+            <div id="loginForm">
+                <form onsubmit="return doLogin()">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit">LOGIN</button>
+                        <button type="button" onclick="showRegister()">REGISTER</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="registerForm" style="display: none;">
+                <form onsubmit="return doRegister()">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="regUser" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="regPass" required>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit">REGISTER</button>
+                        <button type="button" onclick="showLogin()">Back</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</header>
 
-<div class="main-grid">
-    <aside class="sidebar">
-        <div class="card stats">
-            <div id="rank">Iesācējs</div>
-            <div style="font-size: 2rem; font-weight: 800;" id="xp">0 XP</div>
-            <div style="font-size: 0.8rem; opacity: 0.8;">Atrisināti: <span id="count">0</span></div>
-        </div>
-        <div class="card">
-            <div style="font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 1rem;">PRIEKŠMETI</div>
-            <div id="menu"></div>
-        </div>
-    </aside>
-
-    <main class="quiz-box">
-        <div id="topicTag" style="color: var(--primary); font-weight: 800; margin-bottom: 1rem;">MATEMĀTIKA</div>
-        <div class="q-text" id="qText">Ielādē...</div>
-        <input type="text" id="ans" placeholder="Atbilde..." autocomplete="off">
-        <div id="fb" class="feedback"></div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-            <button class="btn btn-check" onclick="check()">Pārbaudīt</button>
-            <button class="btn" onclick="hint()" style="background: #f59e0b; color: white;">Padoms</button>
-        </div>
-    </main>
-</div>
-
-<script>
-    // БАЗА ДАННЫХ ИЗ СКРИНШОТОВ
-    const STATIC_DB = {
-        math: [
-            {q: {lv: "Ja mērogs ir 1:5000, cik metriem dabā atbilst 2 cm kartē?", ru: "Масштаб 1:5000. Сколько метров в природе в 2 см на карте?"}, a: "100", h: "2 * 5000 = 10000 cm = 100 m"},
-            {q: {lv: "Aprēķini: -12 + (-8)", ru: "Вычисли: -12 + (-8)"}, a: "-20", h: "- (12 + 8)"},
-            {q: {lv: "Skaitļa 0.4 apgrieztais skaitlis ir...", ru: "Обратное число для 0.4 это..."}, a: "2.5", h: "1 / 0.4 = 10 / 4 = 2.5"},
-            {q: {lv: "15% no 200 ir...", ru: "15% от 200 это..."}, a: "30", h: "200 * 0.15"},
-            {q: {lv: "Taisnstūra paralēlskaldņa tilpums, ja malas ir 2, 3, 4 cm?", ru: "Объем параллелепипеда со сторонами 2, 3, 4 см?"}, a: "24", h: "V = a * b * c"}
-        ],
-        bio: [
-            {q: {lv: "Kurš process uz Zemes nodrošina skābekli?", ru: "Какой процесс на Земле обеспечивает кислород?"}, a: {lv: "fotosintēze", ru: "фотосинтез"}, h: "Augi un gaisma."},
-            {q: {lv: "Kā sauc vielu pāreju no cieta stāvokļa šķidrā?", ru: "Как называется переход вещества из твердого в жидкое?"}, a: {lv: "kušana", ru: "плавление"}, h: "Ledus pārvēršas ūdenī."},
-            {q: {lv: "Kas atrodas augu šūnas centrā un satur DNS?", ru: "Что в центре растительной клетки содержит ДНК?"}, a: {lv: "kodols", ru: "ядро"}, h: "Šūnas vadības centrs."}
-        ],
-        soc: [
-            {q: {lv: "Kurā gadsimtā mēs dzīvojam tagad?", ru: "В каком веке мы живем сейчас?"}, a: "21", h: "2026. gads."},
-            {q: {lv: "Kā sauc informācijas ieguvi no pagātnes lietām?", ru: "Как называется получение информации из вещей прошлого?"}, a: {lv: "arheoloģija", ru: "археология"}, h: "Izrakumi."}
-        ]
-    };
-
-    // ГЕНЕРАТОР ДЛЯ ДОСТИЖЕНИЯ 50+ ВОПРОСОВ
-    function generateMath() {
-        let type = Math.floor(Math.random() * 4);
-        let n1 = Math.floor(Math.random() * 50), n2 = Math.floor(Math.random() * 50);
-        if(type === 0) return { q: {lv: `Aprēķini: -${n1} + ${n2}`, ru: `Вычисли: -${n1} + ${n2}`}, a: (n2-n1).toString(), h: "Saskaiti negatīvu un pozitīvu." };
-        if(type === 1) return { q: {lv: `Aprēķini: ${n1}% no 200`, ru: `Вычисли: ${n1}% от 200`}, a: (n1*2).toString(), h: "Reizini ar procentu daļu." };
-        if(type === 2) return { q: {lv: `Decimāldaļa: ${n1}/10`, ru: `Десятичная дробь: ${n1}/10`}, a: (n1/10).toString(), h: "Pārvieto komatu." };
-        return STATIC_DB.math[Math.floor(Math.random() * STATIC_DB.math.length)];
-    }
-
-    let state = JSON.parse(localStorage.getItem('mega_db_2026')) || { xp: 0, solved: 0, lang: 'lv', subj: 'math' };
-    let currentTask;
-
-    function save() { localStorage.setItem('mega_db_2026', JSON.stringify(state)); }
-
-    function render() {
-        const subjs = { math: 'Matemātika', bio: 'Dabaszinības', soc: 'Sociālās zinības' };
-        document.getElementById('menu').innerHTML = Object.keys(subjs).map(k => 
-            `<button class="menu-btn ${k===state.subj?'active':''}" onclick="setSubj('${k}')">${subjs[k]}</button>`
-        ).join('');
-    }
-
-    function loadTask() {
-        if(state.subj === 'math') currentTask = generateMath();
-        else {
-            let list = STATIC_DB[state.subj];
-            currentTask = list[Math.floor(Math.random() * list.length)];
-        }
-        document.getElementById('qText').innerText = currentTask.q[state.lang];
-        document.getElementById('ans').value = '';
-        document.getElementById('fb').style.display = 'none';
-        document.getElementById('topicTag').innerText = state.subj.toUpperCase();
-    }
-
-    function check() {
-        let val = document.getElementById('ans').value.trim().toLowerCase();
-        let correct = false;
-        if(typeof currentTask.a === 'object') correct = (val === currentTask.a.lv || val === currentTask.a.ru);
-        else correct = (val === currentTask.a);
-
-        let fb = document.getElementById('fb');
-        fb.style.display = 'block';
-        if(correct) {
-            fb.innerText = state.lang === 'lv' ? "Pareizi! +20 XP" : "Верно! +20 XP";
-            fb.style.background = "#d1fae5";
-            state.xp += 20; state.solved++;
-            updateUI(); save();
-            setTimeout(loadTask, 1200);
-        } else {
-            fb.innerText = state.lang === 'lv' ? "Mēģini vēlreiz!" : "Попробуй еще раз!";
-            fb.style.background = "#fee2e2";
-        }
-    }
-
-    function updateUI() {
-        document.getElementById('xp').innerText = `${state.xp} XP`;
-        document.getElementById('count').innerText = state.solved;
-        let r = "Iesācējs";
-        if(state.xp > 500) r = "Zinātnieks";
-        if(state.xp > 1500) r = "Ģēnijs";
-        document.getElementById('rank').innerText = r;
-    }
-
-    function setSubj(s) { state.subj = s; render(); loadTask(); save(); }
-    function setLang(l) { state.lang = l; render(); loadTask(); save(); }
-    function hint() { alert(currentTask.h); }
-
-    render(); updateUI(); loadTask();
-</script>
+    <script src="script.js"></script>
 </body>
+
 </html>
